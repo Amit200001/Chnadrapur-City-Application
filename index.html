@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chandrapur City Guide | Black Gold City</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            terracotta: '#D95D39',
+                            'terracotta-dark': '#B84524',
+                            forest: '#1E4333',
+                            'forest-light': '#2A5C47',
+                            gold: '#F4A261',
+                            dark: '#1C1917',
+                            sand: '#FDFBF7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F8F6F0;
+            color: #292524;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(30, 67, 51, 0.95) 0%, rgba(28, 25, 23, 0.85) 100%),
+                        url('https://images.unsplash.com/photo-1547970810-dc0eac25ee85?q=80&w=1200&auto=format&fit=crop') center/cover no-repeat;
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -10px rgba(217, 93, 57, 0.15);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col pb-20 md:pb-0">
+
+    <!-- Top Emergency Helpline Banner -->
+    <div class="bg-brand-terracotta text-white text-xs sm:text-sm py-2 px-4 shadow-sm relative z-40">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+            <div class="flex items-center space-x-2 font-medium">
+                <span class="inline-block w-2 h-2 rounded-full bg-yellow-300 animate-pulse"></span>
+                <i class="fa-solid fa-phone-volume"></i>
+                <span>Chandrapur Emergency Helpline:</span>
+            </div>
+            <div class="flex items-center space-x-4 text-xs font-semibold overflow-x-auto hide-scrollbar">
+                <a href="tel:112" class="hover:underline flex items-center gap-1 bg-black/20 px-2 py-0.5 rounded"><i class="fa-solid fa-shield-halved text-xs"></i> Police: 100</a>
+                <a href="tel:108" class="hover:underline flex items-center gap-1 bg-black/20 px-2 py-0.5 rounded"><i class="fa-solid fa-ambulance text-xs"></i> Ambulance: 108</a>
+                <a href="tel:101" class="hover:underline flex items-center gap-1 bg-black/20 px-2 py-0.5 rounded"><i class="fa-solid fa-fire text-xs"></i> Fire: 101</a>
+                <a href="tel:07172250500" class="hover:underline flex items-center gap-1 bg-black/20 px-2 py-0.5 rounded"><i class="fa-solid fa-building text-xs"></i> AMC: 07172-250500</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-30 glass-nav border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand / Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-brand-forest flex items-center justify-center text-white shadow-md">
+                        <i class="fa-solid fa-paw text-xl text-brand-gold"></i>
+                    </div>
+                    <div>
+                        <a href="#" class="font-extrabold text-xl text-brand-dark tracking-tight flex items-center gap-2">
+                            Chandrapur <span class="text-xs bg-brand-terracotta/10 text-brand-terracotta px-2 py-0.5 rounded-full font-semibold border border-brand-terracotta/20">Explorer</span>
+                        </a>
+                        <p class="text-[11px] text-stone-500 font-medium">The Black Gold City</p>
+                    </div>
+                </div>
+
+                <!-- Right Action Buttons -->
+                <div class="flex items-center gap-3">
+                    <button id="favoritesToggleBtn" onclick="toggleFavoritesFilter()" class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg border border-stone-300 text-stone-700 hover:bg-stone-100 transition text-sm font-semibold">
+                        <i id="favHeaderIcon" class="fa-regular fa-bookmark text-brand-terracotta"></i>
+                        <span class="hidden sm:inline">Saved</span>
+                        <span id="favBadge" class="bg-brand-terracotta text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold hidden">0</span>
+                    </button>
+                    <a href="#helpline" class="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-lg bg-brand-forest hover:bg-brand-forest-light text-white text-sm font-semibold shadow-sm transition">
+                        <i class="fa-solid fa-headset"></i> Quick Helplines
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white py-12 md:py-20 px-4 sm:px-6 relative">
+        <div class="max-w-4xl mx-auto text-center space-y-6">
+            <span class="inline-block px-3.5 py-1 rounded-full bg-brand-gold/20 border border-brand-gold/40 text-brand-gold text-xs font-bold uppercase tracking-wider">
+                <i class="fa-solid fa-tree mr-1"></i> Heart of Maharashtra Wildlife
+            </span>
+            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+                Discover the Wild & Historical Heritage of <span class="text-brand-gold decoration-brand-terracotta decoration-wavy decoration-2">Chandrapur</span>
+            </h1>
+            <p class="text-stone-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+                Explore Tadoba National Park, ancient forts, sacred temples, authentic Saoji cuisine, local markets, and essential city services all in one app.
+            </p>
+
+            <!-- Search Bar -->
+            <div class="pt-4 max-w-2xl mx-auto">
+                <div class="relative flex items-center shadow-2xl rounded-2xl overflow-hidden bg-white">
+                    <div class="pl-4 text-stone-400">
+                        <i class="fa-solid fa-magnifying-glass text-lg"></i>
+                    </div>
+                    <input type="text" id="searchInput" onkeyup="filterPlaces()" placeholder="Search places, Saoji spots, hospitals, buses, temples..." 
+                           class="w-full py-4 pl-3 pr-10 text-stone-800 text-sm sm:text-base focus:outline-none placeholder-stone-400">
+                    <button id="clearSearchBtn" onclick="clearSearch()" class="hidden pr-4 text-stone-400 hover:text-stone-600">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Navigation -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
+        <!-- Category Pill Buttons -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-4 hide-scrollbar mb-8 border-b border-stone-200" id="categoryTabs">
+            <!-- Rendered by JS -->
+        </div>
+
+        <!-- Section Info Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
+            <div>
+                <h2 id="sectionTitle" class="text-2xl font-bold text-stone-800 flex items-center gap-2">
+                    All Categories
+                </h2>
+                <p id="resultCount" class="text-xs sm:text-sm text-stone-500 font-medium mt-0.5">Showing all items</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <label for="sortSelect" class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Sort By:</label>
+                <select id="sortSelect" onchange="filterPlaces()" class="bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-xs font-semibold text-stone-700 focus:outline-none focus:ring-2 focus:ring-brand-terracotta">
+                    <option value="featured">Featured First</option>
+                    <option value="rating">Top Rated</option>
+                    <option value="name">Name (A-Z)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Cards Grid -->
+        <div id="cardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Rendered by JS -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-stone-300 p-8 mt-4">
+            <div class="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mx-auto text-stone-400 text-2xl mb-4">
+                <i class="fa-solid fa-map-location-dot"></i>
+            </div>
+            <h3 class="text-lg font-bold text-stone-800">No places found</h3>
+            <p class="text-stone-500 text-sm mt-1 max-w-sm mx-auto">We couldn't find anything matching your search. Try adjusting keywords or category filters.</p>
+            <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-brand-terracotta text-white rounded-xl text-sm font-semibold hover:bg-brand-terracotta-dark transition">
+                Reset All Filters
+            </button>
+        </div>
+    </main>
+
+    <!-- Item Details Modal -->
+    <div id="detailsModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative flex flex-col transform scale-95 transition-transform duration-300" id="modalContainer">
+            <!-- Modal Header Image -->
+            <div class="relative h-56 sm:h-64 bg-stone-200">
+                <img id="modalImg" src="" alt="" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                
+                <button onclick="closeModal()" class="absolute top-4 right-4 bg-black/50 hover:bg-black/80 text-white w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+
+                <div class="absolute bottom-4 left-4 right-4 text-white">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span id="modalCategoryBadge" class="bg-brand-terracotta text-white text-xs px-2.5 py-0.5 rounded-full font-semibold"></span>
+                        <span id="modalRating" class="bg-black/40 backdrop-blur-md text-brand-gold text-xs px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-star"></i> <span>4.8</span>
+                        </span>
+                    </div>
+                    <h3 id="modalTitle" class="text-2xl font-extrabold"></h3>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 space-y-5">
+                <div>
+                    <h4 class="text-xs font-bold uppercase text-stone-400 tracking-wider mb-1">About</h4>
+                    <p id="modalDescription" class="text-stone-700 text-sm sm:text-base leading-relaxed"></p>
+                </div>
+
+                <!-- Key Highlights -->
+                <div id="modalHighlightsContainer" class="hidden">
+                    <h4 class="text-xs font-bold uppercase text-stone-400 tracking-wider mb-2">Key Highlights</h4>
+                    <div id="modalHighlights" class="flex flex-wrap gap-2"></div>
+                </div>
+
+                <!-- Info Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-stone-50 p-4 rounded-xl border border-stone-200 text-xs sm:text-sm">
+                    <div class="flex items-start gap-2.5 text-stone-700">
+                        <i class="fa-solid fa-location-dot text-brand-terracotta mt-1"></i>
+                        <div>
+                            <span class="block font-bold text-stone-900">Address</span>
+                            <span id="modalAddress" class="text-stone-600"></span>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-2.5 text-stone-700">
+                        <i class="fa-solid fa-clock text-brand-forest mt-1"></i>
+                        <div>
+                            <span class="block font-bold text-stone-900">Timing / Hours</span>
+                            <span id="modalTiming" class="text-stone-600"></span>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-2.5 text-stone-700">
+                        <i class="fa-solid fa-phone text-blue-600 mt-1"></i>
+                        <div>
+                            <span class="block font-bold text-stone-900">Contact / Helpline</span>
+                            <span id="modalContact" class="text-stone-600"></span>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-2.5 text-stone-700">
+                        <i class="fa-solid fa-ticket text-amber-600 mt-1"></i>
+                        <div>
+                            <span class="block font-bold text-stone-900">Entry / Fee Info</span>
+                            <span id="modalEntry" class="text-stone-600"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Action Buttons -->
+                <div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+                    <a id="modalMapBtn" href="#" target="_blank" class="w-full sm:flex-1 bg-brand-forest hover:bg-brand-forest-light text-white text-center py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition">
+                        <i class="fa-solid fa-diamond-turn-right text-brand-gold"></i> Get Directions (Google Maps)
+                    </a>
+                    <button id="modalFavBtn" onclick="" class="w-full sm:w-auto px-5 py-3 border border-stone-300 rounded-xl text-stone-700 font-bold text-sm hover:bg-stone-100 flex items-center justify-center gap-2 transition">
+                        <i class="fa-regular fa-bookmark"></i> Save Place
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="helpline" class="bg-brand-dark text-stone-400 py-12 border-t border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+                <div class="flex items-center gap-2 text-white font-bold text-lg mb-3">
+                    <i class="fa-solid fa-paw text-brand-gold"></i> Chandrapur City
+                </div>
+                <p class="text-xs text-stone-400 leading-relaxed">
+                    Designed to connect residents and tourists with everything Chandrapur has to offer: Tadoba tiger safaris, historical monuments, local Saoji food culture, and emergency public utilities.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-white text-sm font-bold uppercase tracking-wider mb-3">Quick Navigation</h4>
+                <ul class="space-y-2 text-xs">
+                    <li><button onclick="setCategory('tourist')" class="hover:text-brand-gold transition">Tourist Attractions</button></li>
+                    <li><button onclick="setCategory('food')" class="hover:text-brand-gold transition">Saoji & Food Joints</button></li>
+                    <li><button onclick="setCategory('helpline')" class="hover:text-brand-gold transition">Hospitals & Emergency Helplines</button></li>
+                    <li><button onclick="setCategory('transport')" class="hover:text-brand-gold transition">Railway Station & Bus Timings</button></li>
+                    <li><button onclick="setCategory('markets')" class="hover:text-brand-gold transition">Local Shopping Markets</button></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white text-sm font-bold uppercase tracking-wider mb-3">Chandrapur Municipal Info</h4>
+                <p class="text-xs text-stone-400 mb-2"><i class="fa-solid fa-building-columns mr-1.5 text-brand-terracotta"></i> Chandrapur Municipal Corporation (CMC)</p>
+                <p class="text-xs text-stone-400 mb-2"><i class="fa-solid fa-location-arrow mr-1.5 text-brand-terracotta"></i> Near Gandhi Chowk, Chandrapur - 442401</p>
+                <p class="text-xs text-stone-400"><i class="fa-solid fa-envelope mr-1.5 text-brand-terracotta"></i> cmcchandrapur@maharashtra.gov.in</p>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 mt-8 border-t border-stone-800/80 text-center text-xs text-stone-500">
+            © 2026 Chandrapur City Interactive Guide. Developed with pride for the Black Gold City.
+        </div>
+    </footer>
+
+    <script>
+        // Data Structure for Chandrapur Places & Services
+        const placesData = [
+            // TOURIST PLACES
+            {
+                id: 'tadoba-reserve',
+                name: 'Tadoba-Andhari Tiger Reserve',
+                category: 'tourist',
+                rating: 4.9,
+                image: 'https://images.unsplash.com/photo-1561731216-c3a4d99437d5?q=80&w=800&auto=format&fit=crop',
+                description: 'Maharashtra’s oldest and largest national park, world-renowned for high tiger density, sloth bears, leopards, and diverse jungle safari zones.',
+                highlights: ['Moharli Gate', 'Kolara Gate', 'Jungle Safari', 'Birder’s Paradise'],
+                address: 'Moharli / Kolara Gates, ~30km from Chandrapur',
+                timing: '6:00 AM - 10:00 AM | 3:00 PM - 6:00 PM',
+                contact: '07172-251414 (Forest Dept)',
+                entry: 'Safari permit costs vary by zone & vehicle',
+                mapUrl: 'https://www.google.com/maps/search/?api=1&query=Tadoba-Andhari+Tiger+Reserve+Chandrapur',
+                featured: true
+            },
+            {
+                id: 'mahakali-temple',
+                name: 'Mahakali Mandir',
+                category: 'tourist',
+                rating: 4.8,
+                image: 'Mahakali Temple.jpg',
+                description: 'An ancient, revered temple dedicated to Goddess Mahakali built by Gond King Khandkya Ballal Shah. It attracts lakhs of devotees during the annual fair.',
+                highlights: ['Historic Gond Architecture', 'Navratri Jatra', 'Sacred Idol'],
+                address: 'Mahakali Ward, Chandrapur City',
+                timing: '5:00 AM - 9:00 PM (Daily)',
+                contact: 'Local Temple Trust',
+                entry: 'Free Entry',
+                mapUrl: 'https://www.google.com/maps/search/?api=1&query=Mahakali+Temple+Chandrapur',
+                featured: true
+            },
+            {
+                id: 'chandrapur-fort',
+                name: 'Chandrapur Gond Fort',
+                category: 'tourist',
+                rating: 4.5,
+                image: 'Gond Fort.jpg',
+                description: 'A grand stone fort built in the 13th-15th century by Gond rulers with 15-km long fortified walls and historic gates including Pathanpura, Jatpura, and Anchaleshwar Gates.',
+                highlights: ['Pathanpura Gate', 'Ancient Stone Walls', 'Historical Heritage'],
+                address: 'Heart of Old Chandrapur Town',
+                timing: 'Open 24 Hours (Best in daylight)',
+                contact: 'Archaeology Dept',
+                entry: 'Free Entry',
+                mapUrl: 'https://maps.app.goo.gl/1xE2vzs7bozLWxzR6',
+                featured: false
+            },
+            {
+                id: 'junona-lake',
+                name: 'Junona Lake',
+                category: 'tourist',
+                rating: 4.4,
+                image: 'Junona Lake.png',
+                description: 'A serene freshwater lake located on the outskirts of Chandrapur, perfect for sunset views, bird watching, and peaceful evening picnics.',
+                highlights: ['Sunset Viewpoint', 'Migratory Birds', 'Relaxing Environment'],
+                address: 'Near Junona Village, 12 km from city',
+                timing: '6:00 AM - 6:30 PM',
+                contact: 'N/A',
+                entry: 'Free Entry',
+                mapUrl: 'https://www.google.com/maps/search/?api=1&query=Junona+Lake+Chandrapur',
+                featured: false
+            },
+            {
+                id: 'erai-dam',
+                name: 'Erai Dam',
+                category: 'tourist',
+                rating: 4.3,
+                image: 'Erai Dam.png',
+                description: 'An earthfill dam built across the Erai river supplying vital water to Chandrapur Super Thermal Power Station and the city, featuring scenic scenic backwaters.',
+                highlights: ['Scenic Water View', 'Cool Evening Breeze', 'Monsoon Attraction'],
+                address: 'Erai River Basin, ~15km North',
+                timing: '7:00 AM - 6:00 PM',
+                contact: 'Irrigation Dept',
+                entry: 'Free Access',
+                mapUrl: 'https://www.google.com/maps/search/?api=1&query=Erai+Dam+Chandrapur',
+                featured: false
+            },
+
+            // FOOD & SAOJI CUISINE
+            {
+                id: 'Biryani Hotel',
+                name: 'Hotel Saoji Thale',
+                category: 'food',
+                rating: 4.7,
+                image: 'Saoji Thale.jpg',
+                description: 'Famous for authentic Vidarbha Saoji chicken, mutton curry, and spicy Saoji paneer made with hand-ground hot aromatic spices.',
+                highlights: ['Mutton Saoji', 'Chicken Saoji', 'Spicy Kheema', 'Bhakri'],
+                address: 'Jatpura Gate Road, Near Bus Stand',
+                timing: '12:00 PM - 3:30 PM | 7:00 PM - 11:00 PM',
+                contact: '+91 98220 00000',
+                entry: '₹250 - ₹500 for two',
+                mapUrl: 'https://www.google.com/maps/search/?api=1&query=Saoji+Restaurant+Jatpura+Gate+Chandrapur',
+                featured: true
+            },
+            {
+                id: 'khandesh-saoji',
+                name: 'Sultan Biryani',
+                category: 'food',
+                rating: 4.6,
+                image: 'Biryani.jpg',
+                description: 'Family-friendly dining spot offering both mild Indian thalis and spicy local Chandrapuri Saoji gravies served with fresh Jowar bhakris.',
+                highlights: ['Family Section', 'Veg Saoji', 'Chicken Sukka'],
+                address: 'Tukum Road',
+                timing: '11:00 AM - 10:30 PM',
+                contact: '+91 9657174591',
+                entry: '₹250 - ₹500 for two',
+                mapUrl: 'https://maps.app.goo.gl/7RXzxupFF4krp7cZ6',
+                featured: false
+            },
+
+            // LOCAL SERVICES & HELPLINE
+            {
+                id: 'govt-hospital',
+                name: 'Government General Hospital (GMC)',
+                category: 'helpline',
+                rating: 4.5,
+                image:'Gov Hospital.png' ,
+                description: 'Primary public medical college & tertiary multi-specialty government hospital equipped with 24/7 trauma and emergency ICU services.',
+                highlights: ['24/7 Casualty', 'Blood Bank', 'Free Emergency Care'],
+                address: 'Near Ramnagar, Chandrapur',
+                timing: 'Open 24/7 (Emergency)',
+                contact: '07172-252211 / 108',
+                entry: 'Govt Healthcare',
+                mapUrl: 'https://www.google.com/maps/search/?api=1&query=Government+Medical+College+Hospital+Chandrapur',
+                featured: true
+            },
+            {
+                id: 'police-station',
+                name: 'Chandrapur City Police Station',
+                category: 'helpline',
+                rating: 4.6,
+                image: 'Police Station.jpg',
+                description: 'Headquarters for local law enforcement, emergency helpline dispatch, citizen assistance, and traffic control division.',
+                highlights: ['112 Emergency', 'Women Safety Desk', 'Traffic Control'],
+                address: 'Near Collectorate Office, Chandrapur',
+                timing: 'Open 24/7',
+                contact: '112 / 07172-255100',
+                entry: 'Public Utility',
+                mapUrl: 'https://www.google.com/maps/search/?api=1&query=City+Police+Station+Chandrapur',
+                featured: false
+            },
+            {
+                id: 'municipal-office',
+                name: 'Chandrapur Municipal Corporation (CMC)',
+                category: 'helpline',
+                rating: 4.2,
+                image: 'Municipal Corporation.jpg',
+                description: 'Civic administration body offering birth/death certificates, property tax payments, water services, and public grievance resolution.',
+                highlights: ['Civic Services', 'Property Tax Desk', 'Sanitation Cell'],
+                address: 'Near Collectorate, Civil Lines, Chandrapur',
+                timing: '10:00 AM - 5:45 PM (Mon - Sat)',
+                contact: '07172-250500',
+                entry: 'Civic Office',
+                mapUrl: 'https://www.google.com/maps/search/?api=1&query=Chandrapur+Municipal+Corporation',
+                featured: false
+            },
+
+            // MARKETS & SHOPPING
+            {
+                id: 'gandhi-chowk-market',
+                name: 'Gandhi Chowk Market',
+                category: 'markets',
+                rating: 4.6,
+                image: 'Gandhi Chowk.jpg',
+                description: 'The bustling commercial heart of Chandrapur filled with clothing boutiques, jewelry stores, electronics, and local handicrafts.',
+                highlights: ['Textiles', 'Traditional Artifacts', 'Local Snacks'],
+                address: 'Gandhi Chowk, Central City',
+                timing: '10:00 AM - 9:30 PM (Closed Mon)',
+                contact: 'Local Market Traders',
+                entry: 'Shopping Hub',
+                mapUrl: 'https://maps.app.goo.gl/wB5KwxpZLQnD4YJL8',
+                featured: true
+            },
+            {
+                id: 'Jatpura Gate',
+                name: 'Jatpura Gate',
+                category: 'tourist',
+                rating: 4.3,
+                image: 'Jatpura Gate.jpg',
+                description: 'Traditional street bazaar known for budget garments, footwear, household utensils, and seasonal agro-produce.',
+                highlights: ['Budget Shopping', 'Footwear', 'Household Items'],
+                address: 'Jatpura Gate, Near Old Fort',
+                timing: '10:00 AM - 9:00 PM',
+                contact: 'N/A',
+                entry: 'Free Entry',
+                mapUrl: 'https://www.google.com/maps/place/Jatpura+Gate/@19.9574665,79.2932278,17z/data=!4m14!1m7!3m6!1s0x3bd2d42b5975e99f:0x18f3b70faabbb4ae!2sJatpura+Gate!8m2!3d19.9574677!4d79.2954158!16s%2Fg%2F1tjz6dq0!3m5!1s0x3bd2d42b5975e99f:0x18f3b70faabbb4ae!8m2!3d19.9574677!4d79.2954158!16s%2Fg%2F1tjz6dq0?entry=ttu&g_ep=EgoyMDI2MDkyMS4wIKXMDSoASAFQAw%3D%3D',
+                featured: false
+            },
+
+            // TRANSPORT & TRANSIT
+            {
+                id: 'railway-station',
+                name: 'Chandrapur Railway Station (CD)',
+                category: 'transport',
+                rating: 4.5,
+                image: 'Railway.jpg',
+                description: 'Major railway junction under Central Railway on the New Delhi-Chennai main line connecting Chandrapur to Nagpur, Mumbai, and Hyderabad.',
+                highlights: ['Express Trains', 'IRCTC Reservation', 'Waiting Lounges'],
+                address: 'Station Road, Chandrapur',
+                timing: 'Open 24 Hours',
+                contact: 'Enquiry: 139',
+                entry: 'Platform Ticket Required',
+                mapUrl: 'https://www.google.com/maps/search/?api=1&query=Chandrapur+Railway+Station',
+                featured: true
+            },
+            {
+                id: 'msrtc-bus-stand',
+                name: 'MSRTC Main Bus Depot',
+                category: 'transport',
+                rating: 4.3,
+                image: 'Bus Stand.jpg',
+                description: 'Central intercity state transport hub connecting Chandrapur to Nagpur, Gadchiroli, Yavatmal, Pune, and Chimur.',
+                highlights: ['Shivshahi AC Buses', 'Interstate Routes', '24/7 Booking'],
+                address: 'Main Road, Near Jatpura Gate',
+                timing: 'Open 24 Hours',
+                contact: '07172-252033',
+                entry: 'Bus Fare Applies',
+                mapUrl: 'https://www.google.com/maps/search/?api=1&query=MSRTC+Bus+Stand+Chandrapur',
+                featured: false
+            }
+        ];
+
+        // Categories Configuration
+        const categories = [
+            { id: 'all', label: 'All Places', icon: 'fa-cubes' },
+            { id: 'tourist', label: 'Tourist & Nature', icon: 'fa-tree' },
+            { id: 'food', label: 'Saoji & Dining', icon: 'fa-utensils' },
+            { id: 'helpline', label: 'Helpline & Services', icon: 'fa-kit-medical' },
+            { id: 'markets', label: 'Markets & Shopping', icon: 'fa-bag-shopping' },
+            { id: 'transport', label: 'Transit & Stations', icon: 'fa-bus' }
+        ];
+
+        // App State
+        let currentCategory = 'all';
+        let searchQuery = '';
+        let showFavoritesOnly = false;
+        let savedFavorites = JSON.parse(localStorage.getItem('chandrapur_favs') || '[]');
+
+        // Initialize App
+        window.onload = function() {
+            renderCategoryTabs();
+            filterPlaces();
+            updateFavBadge();
+        };
+
+        function renderCategoryTabs() {
+            const container = document.getElementById('categoryTabs');
+            container.innerHTML = categories.map(cat => `
+                <button onclick="setCategory('${cat.id}')" 
+                        id="tab-${cat.id}" 
+                        class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 whitespace-nowrap transition-all border ${
+                            currentCategory === cat.id && !showFavoritesOnly
+                            ? 'bg-brand-forest text-white border-brand-forest shadow-sm'
+                            : 'bg-white text-stone-600 border-stone-200 hover:bg-stone-100'
+                        }">
+                    <i class="fa-solid ${cat.icon} ${currentCategory === cat.id && !showFavoritesOnly ? 'text-brand-gold' : 'text-stone-400'}"></i>
+                    ${cat.label}
+                </button>
+            `).join('');
+        }
+
+        function setCategory(catId) {
+            currentCategory = catId;
+            showFavoritesOnly = false;
+            
+            // Reset Fav Header Styling
+            const favBtn = document.getElementById('favoritesToggleBtn');
+            favBtn.classList.remove('bg-brand-terracotta', 'text-white');
+            favBtn.classList.add('border-stone-300', 'text-stone-700');
+
+            renderCategoryTabs();
+            filterPlaces();
+        }
+
+        function toggleFavoritesFilter() {
+            showFavoritesOnly = !showFavoritesOnly;
+            const favBtn = document.getElementById('favoritesToggleBtn');
+
+            if(showFavoritesOnly) {
+                favBtn.classList.add('bg-brand-terracotta', 'text-white');
+                favBtn.classList.remove('border-stone-300', 'text-stone-700');
+                document.getElementById('sectionTitle').innerText = 'Saved Bookmarks';
+            } else {
+                favBtn.classList.remove('bg-brand-terracotta', 'text-white');
+                favBtn.classList.add('border-stone-300', 'text-stone-700');
+            }
+
+            renderCategoryTabs();
+            filterPlaces();
+        }
+
+        function filterPlaces() {
+            searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
+            const sortBy = document.getElementById('sortSelect').value;
+            const clearBtn = document.getElementById('clearSearchBtn');
+
+            if (searchQuery.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+
+            let filtered = placesData.filter(item => {
+                // Category Filter
+                const matchesCategory = (currentCategory === 'all' || item.category === currentCategory);
+                
+                // Search Filter
+                const matchesSearch = item.name.toLowerCase().includes(searchQuery) ||
+                                      item.description.toLowerCase().includes(searchQuery) ||
+                                      item.address.toLowerCase().includes(searchQuery) ||
+                                      item.highlights.some(h => h.toLowerCase().includes(searchQuery));
+
+                // Favorite Filter
+                const matchesFav = !showFavoritesOnly || savedFavorites.includes(item.id);
+
+                return matchesCategory && matchesSearch && matchesFav;
+            });
+
+            // Sorting logic
+            if (sortBy === 'rating') {
+                filtered.sort((a, b) => b.rating - a.rating);
+            } else if (sortBy === 'name') {
+                filtered.sort((a, b) => a.name.localeCompare(b.name));
+            } else {
+                // Featured first
+                filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+            }
+
+            // Update Header Title
+            if(!showFavoritesOnly) {
+                const catObj = categories.find(c => c.id === currentCategory);
+                document.getElementById('sectionTitle').innerText = catObj ? catObj.label : 'All Places';
+            }
+            
+            document.getElementById('resultCount').innerText = `Showing ${filtered.length} item${filtered.length === 1 ? '' : 's'}`;
+
+            renderGrid(filtered);
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            filterPlaces();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            currentCategory = 'all';
+            showFavoritesOnly = false;
+            renderCategoryTabs();
+            filterPlaces();
+        }
+
+        function renderGrid(items) {
+            const grid = document.getElementById('cardsGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            if (items.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = items.map(item => {
+                const isFav = savedFavorites.includes(item.id);
+                return `
+                    <div class="bg-white rounded-2xl overflow-hidden border border-stone-200/80 shadow-sm card-hover flex flex-col justify-between">
+                        <div>
+                            <!-- Image Header -->
+                            <div class="relative h-48 bg-stone-100 overflow-hidden cursor-pointer" onclick="openModal('${item.id}')">
+                                <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy" onerror="this.src='https://placehold.co/600x400/1E4333/FFF?text=${encodeURIComponent(item.name)}'">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                                
+                                <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-md text-stone-800 text-[11px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-wide border border-stone-200">
+                                    ${item.category}
+                                </span>
+
+                                <button onclick="event.stopPropagation(); toggleBookmark('${item.id}')" 
+                                        class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-stone-700 shadow hover:bg-white transition">
+                                    <i class="${isFav ? 'fa-solid text-brand-terracotta' : 'fa-regular'} fa-bookmark"></i>
+                                </button>
+
+                                <div class="absolute bottom-3 left-3 right-3 flex justify-between items-center text-white">
+                                    <span class="text-xs font-semibold bg-black/40 px-2 py-0.5 rounded-full backdrop-blur-sm flex items-center gap-1">
+                                        <i class="fa-solid fa-star text-brand-gold text-xs"></i> ${item.rating}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Content Section -->
+                            <div class="p-5">
+                                <h3 class="font-extrabold text-stone-800 text-lg mb-1.5 cursor-pointer hover:text-brand-terracotta transition" onclick="openModal('${item.id}')">
+                                    ${item.name}
+                                </h3>
+                                <p class="text-stone-600 text-xs line-clamp-2 leading-relaxed mb-4">
+                                    ${item.description}
+                                </p>
+
+                                <!-- Highlights Chips -->
+                                <div class="flex flex-wrap gap-1.5 mb-4">
+                                    ${item.highlights.slice(0, 3).map(h => `
+                                        <span class="bg-stone-100 text-stone-600 text-[10px] font-semibold px-2 py-0.5 rounded-md">
+                                            #${h}
+                                        </span>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Footer Actions -->
+                        <div class="px-5 pb-5 pt-0 border-t border-stone-100 flex items-center justify-between gap-2 mt-auto">
+                            <span class="text-[11px] text-stone-500 font-medium truncate max-w-[50%]">
+                                <i class="fa-solid fa-location-dot text-brand-terracotta mr-1"></i> ${item.address.split(',')[0]}
+                            </span>
+                            <div class="flex items-center gap-2">
+                                <button onclick="openModal('${item.id}')" class="px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold text-xs transition">
+                                    Details
+                                </button>
+                                <a href="${item.mapUrl}" target="_blank" class="px-3 py-1.5 rounded-lg bg-brand-forest hover:bg-brand-forest-light text-white font-bold text-xs flex items-center gap-1 transition">
+                                    <i class="fa-solid fa-diamond-turn-right text-brand-gold"></i> Map
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleBookmark(id) {
+            if (savedFavorites.includes(id)) {
+                savedFavorites = savedFavorites.filter(favId => favId !== id);
+            } else {
+                savedFavorites.push(id);
+            }
+            localStorage.setItem('chandrapur_favs', JSON.stringify(savedFavorites));
+            updateFavBadge();
+            filterPlaces();
+        }
+
+        function updateFavBadge() {
+            const badge = document.getElementById('favBadge');
+            if (savedFavorites.length > 0) {
+                badge.innerText = savedFavorites.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function openModal(id) {
+            const item = placesData.find(p => p.id === id);
+            if (!item) return;
+
+            document.getElementById('modalImg').src = item.image;
+            document.getElementById('modalTitle').innerText = item.name;
+            document.getElementById('modalCategoryBadge').innerText = item.category.toUpperCase();
+            document.getElementById('modalRating').innerHTML = `<i class="fa-solid fa-star"></i> <span>${item.rating}</span>`;
+            document.getElementById('modalDescription').innerText = item.description;
+            document.getElementById('modalAddress').innerText = item.address;
+            document.getElementById('modalTiming').innerText = item.timing;
+            document.getElementById('modalContact').innerText = item.contact;
+            document.getElementById('modalEntry').innerText = item.entry;
+            document.getElementById('modalMapBtn').href = item.mapUrl;
+
+            // Render Highlights inside Modal
+            const hlContainer = document.getElementById('modalHighlightsContainer');
+            const hlContent = document.getElementById('modalHighlights');
+            if(item.highlights && item.highlights.length > 0) {
+                hlContent.innerHTML = item.highlights.map(h => `
+                    <span class="bg-brand-terracotta/10 text-brand-terracotta border border-brand-terracotta/20 text-xs font-semibold px-2.5 py-1 rounded-lg">
+                        <i class="fa-solid fa-check text-[10px] mr-1"></i> ${h}
+                    </span>
+                `).join('');
+                hlContainer.classList.remove('hidden');
+            } else {
+                hlContainer.classList.add('hidden');
+            }
+
+            // Modal Favorite Button
+            const modalFavBtn = document.getElementById('modalFavBtn');
+            const isFav = savedFavorites.includes(item.id);
+            modalFavBtn.innerHTML = isFav 
+                ? `<i class="fa-solid fa-bookmark text-brand-terracotta"></i> Saved` 
+                : `<i class="fa-regular fa-bookmark"></i> Save Place`;
+            modalFavBtn.onclick = function() {
+                toggleBookmark(item.id);
+                openModal(item.id); // re-render modal state
+            };
+
+            const modal = document.getElementById('detailsModal');
+            const container = document.getElementById('modalContainer');
+            
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            container.classList.remove('scale-95');
+            container.classList.add('scale-100');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('detailsModal');
+            const container = document.getElementById('modalContainer');
+
+            container.classList.remove('scale-100');
+            container.classList.add('scale-95');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close Modal on backdrop click
+        document.getElementById('detailsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
